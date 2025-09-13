@@ -52,7 +52,7 @@ class Snake:
 class Game:
   def __init__(self):
     self.snake = Snake()
-    self.food = Food()
+    self.food = Food(self.snake.body)
   
   def draw(self):
     self.snake.draw()
@@ -61,12 +61,20 @@ class Game:
   def update(self):
     self.snake.update()
     self.check_collision_with_food()
+    self.check_collision_with_edges()
     
   def check_collision_with_food(self):
     if self.snake.body[0] == self.food.position:
-      self.food.position = self.food.generate_random_pos()
+      self.food.position = self.food.generate_random_pos(self.snake.body)
       self.snake.add_segment = True
-
+      
+  def check_collision_with_edges(self):
+    if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
+      self.game_over()
+    if self.snake.body[0].y == number_of_cells or self.snake.body[0].y == -1:
+      self.game_over()
+    
+    
 screen = pygame.display.set_mode((cell_size*number_of_cells, cell_size*number_of_cells))
 
 pygame.display.set_caption("Retro Snakes")
